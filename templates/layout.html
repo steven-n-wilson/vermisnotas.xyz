@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Workshop &mdash; Colorlib Website Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='fonts/icomoon/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/bootstrap-datepicker.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='fonts/flaticon/font/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/aos.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    {% include 'includes/_navbar.html' %}
+
+    <div class='jinjaContainer'>
+        {% block body %} {% endblock %}
+    </div>
+
+    {% include 'includes/_footer.html' %}
+
+
+
+    <script src="static/js/jquery-3.3.1.min.js"></script>
+    <script src="static/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="static/js/jquery-ui.js"></script>
+    <script src="static/js/popper.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/owl.carousel.min.js"></script>
+    <script src="static/js/jquery.stellar.min.js"></script>
+    <script src="static/js/jquery.countdown.min.js"></script>
+    <script src="static/js/jquery.magnific-popup.min.js"></script>
+    <script src="static/js/bootstrap-datepicker.min.js"></script>
+    <script src="static/js/aos.js"></script>
+
+    <script src="static/js/main.js"></script>
+
+</body>
+
+</html>
