@@ -25,10 +25,10 @@ def parse(soup):
 
 
 def output(notas):
-    gc = gspread.service_account(filename='wa_worker/creds.json')
+    gc = gspread.service_account(filename='creds.json')
     sh = gc.open('scrapetosheets').sheet1
 
-    sh.append_row(['first', 'second', 'third'])
+    sh.update('A1', str(notas))
 
 
 conf = yaml.load(open('loginDetails.yml'), Loader=yaml.FullLoader)
@@ -37,7 +37,6 @@ myWA_password = conf['webAssign_user']['cengagePassword']
 
 
 driver = webdriver.Chrome()
-
 login('https://www.webassign.net/wa-auth/login', 'email',
       myWA_email, 'cengagePassword', myWA_password, 'Login')
 
@@ -45,4 +44,5 @@ time.sleep(10)
 # driver.find_element_by_partial_link_text('Grades').click()
 current_url = driver.current_url
 
-print(request(current_url))
+soup = request(current_url)
+output(soup)
