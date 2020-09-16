@@ -6,7 +6,7 @@ import optparse
 app = Flask(__name__)
 
 developer = os.getenv("DEVELOPER", "Steven Wilson")
-environment = os.getenv("ENVIRONMENT", "development")
+environment = os.getenv("ENVIRONMENT", "production")
 
 
 @app.route("/")
