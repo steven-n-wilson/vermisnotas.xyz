@@ -14,29 +14,14 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/about")
+@app.route("/nosotros")
 def about():
-    return render_template("about.html")
+    return render_template("nosotros.html")
 
 
-@app.route("/speakers")
-def speakers():
-    return render_template("speakers.html")
-
-
-@app.route("/news")
-def news():
-    return render_template("news.html")
-
-
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
-
-
-@app.route("/buy-tickets")
+@app.route("/ver-notas")
 def buy_tickets():
-    return render_template("buy-tickets.html")
+    return render_template("ver-notas.html")
 
 
 if __name__ == "__main__":
