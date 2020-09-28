@@ -24,12 +24,6 @@ def get_student_scores():
     return scores
 
 
-def request(url):
-    r = requests.get(url)
-    soup = BeautifulSoup(r.content, 'html.parser')
-    return soup
-
-
 def parse(soup):
     pass
 
@@ -48,9 +42,7 @@ if __name__ == "__main__":
     import yaml
     import time
     import gspread
-    import requests
     import datetime
-    from bs4 import BeautifulSoup
     from selenium import webdriver
     from selenium.webdriver.support.ui import Select
 
@@ -64,6 +56,3 @@ if __name__ == "__main__":
 
     student_scores = get_student_scores()
     output(student_scores)
-
-    # current_url = driver.current_url
-    # soup = request(current_url)
