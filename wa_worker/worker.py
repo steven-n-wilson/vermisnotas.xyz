@@ -14,6 +14,16 @@ def go_to_class(class_name):
     select.select_by_visible_text(class_name)
 
 
+def get_student_scores():
+    table = driver.find_element_by_xpath(
+        '//*[@id="table-wrapper"]/div[1]/div[2]/table')
+    scores = []
+    for row in table.find_elements_by_xpath(".//tr"):
+        [scores.append(td.text) for td in row.find_elements_by_xpath(
+            '//*[@id="11475531"]/td[4]/font')]
+    return scores
+
+
 def request(url):
     r = requests.get(url)
     soup = BeautifulSoup(r.content, 'html.parser')
@@ -27,8 +37,10 @@ def parse(soup):
 def output(notas):
     gc = gspread.service_account(filename='wa_worker/creds.json')
     sh = gc.open('scrapetosheets').sheet1
-
-    sh.update('A1', str(notas))
+    sh.update('J1', int(notas[0]))
+    notas.pop(0)
+    for i in range(len(notas)):
+        sh.update(f'J{3 + i}', int(notas[i]))
 
 
 if __name__ == "__main__":
@@ -50,7 +62,8 @@ if __name__ == "__main__":
     login(WA_email, WA_password)
     go_to_class("MC 106, section A, Fall 2020")
 
-    current_url = driver.current_url
+    student_scores = get_student_scores()
+    output(student_scores)
 
-    soup = request(current_url)
-    output(soup)
+    # current_url = driver.current_url
+    # soup = request(current_url)
