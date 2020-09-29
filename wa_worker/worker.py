@@ -38,8 +38,12 @@ def load_gspread(creds_file_path, spread_name):
     return sh
 
 
-def update_webassign(sh, sheet_name, scores):
+def load_worksheet(sh, sheet_name):
     worksheet = sh.worksheet(sheet_name)
+    return worksheet
+
+
+def update_webassign(worksheet, scores):
     worksheet.update('J1', int(scores[0]))
     scores.pop(0)
     for i in range(len(scores)):
@@ -67,5 +71,10 @@ if __name__ == "__main__":
     print(student_scores)
 
     sh = load_gspread('wa_worker/creds.json', 'scrapetosheets')
-    update_webassign(sh,
-                     'NotasFinales',  student_scores)
+    worksheet = load_worksheet(sh, 'NotasFinales')
+
+    update_webassign(worksheet, student_scores)
+    list_of_lists = worksheet.get_all_values()
+    print(list_of_lists[0])
+    print(list_of_lists[1])
+    print(list_of_lists[2])
