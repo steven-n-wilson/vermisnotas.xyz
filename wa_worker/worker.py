@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import Select
 from loginDetails import email, cengagePassword
 
 
-class Navigate():
+class WebAssign():
 
     driver = webdriver.Chrome(executable_path='wa_worker/chromedriver.exe')
 
@@ -14,37 +14,31 @@ class Navigate():
         self.password = password
 
     def login(self):
-        Navigate.driver.get('https://www.webassign.net/wa-auth/login')
-        Navigate.driver.find_element_by_id('email').send_keys(self.username)
-        Navigate.driver.find_element_by_id(
+        WebAssign.driver.get('https://www.webassign.net/wa-auth/login')
+        WebAssign.driver.find_element_by_id('email').send_keys(self.username)
+        WebAssign.driver.find_element_by_id(
             'cengagePassword').send_keys(self.password)
-        Navigate.driver.find_element_by_name('Login').click()
+        WebAssign.driver.find_element_by_name('Login').click()
 
     def go_to_class(self, class_name):
-        Navigate.driver.find_element_by_xpath(
+        WebAssign.driver.find_element_by_xpath(
             '//*[@id="list"]/li[5]/a').click()
-        Navigate.driver.find_element_by_xpath(
+        WebAssign.driver.find_element_by_xpath(
             '//*[@id="list"]/li[5]/ul/li[3]/a').click()
 
-        select = Select(Navigate.driver.find_element_by_id('scourse'))
+        select = Select(WebAssign.driver.find_element_by_id('scourse'))
         select.select_by_visible_text(class_name)
 
+    def get_student_scores(self):
+        table = WebAssign.driver.find_element_by_xpath(
+            '//*[@id="table-wrapper"]/div[1]/div[2]/table')
 
-def get_student_scores():
+        scores = []
+        for row in table.find_elements_by_xpath(".//tr"):
+            [scores.append(td.text) for td in row.find_elements_by_xpath(
+                '//*[@id="11588030"]/td[4]/font')]
 
-    table = driver.find_element_by_xpath(
-        '//*[@id="table-wrapper"]/div[1]/div[2]/table')
-
-    scores = []
-    for row in table.find_elements_by_xpath(".//tr"):
-        [scores.append(td.text) for td in row.find_elements_by_xpath(
-            '//*[@id="11588030"]/td[4]/font')]
-
-    return scores
-
-
-def parse(soup):
-    pass
+        return scores
 
 
 def load_gspread(creds_file_path, spread_name):
@@ -63,6 +57,10 @@ def update_webassign(worksheet, scores):
     scores.pop(0)
     for i in range(len(scores)):
         worksheet.update(f'J{3 + i}', int(scores[i]))
+
+
+def parse(soup):
+    pass
 
 
 if __name__ == "__main__":
