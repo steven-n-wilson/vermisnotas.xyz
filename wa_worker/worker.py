@@ -1,3 +1,10 @@
+import gspread
+from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+
+from loginDetails import email, cengagePassword
+
+
 class Navigate():
 
     driver = webdriver.Chrome(executable_path='wa_worker/chromedriver.exe')
@@ -13,13 +20,14 @@ class Navigate():
             'cengagePassword').send_keys(self.password)
         Navigate.driver.find_element_by_name('Login').click()
 
+    def go_to_class(self, class_name):
+        Navigate.driver.find_element_by_xpath(
+            '//*[@id="list"]/li[5]/a').click()
+        Navigate.driver.find_element_by_xpath(
+            '//*[@id="list"]/li[5]/ul/li[3]/a').click()
 
-def go_to_class(class_name):
-    driver.find_element_by_xpath('//*[@id="list"]/li[5]/a').click()
-    driver.find_element_by_xpath('//*[@id="list"]/li[5]/ul/li[3]/a').click()
-
-    select = Select(driver.find_element_by_id('scourse'))
-    select.select_by_visible_text(class_name)
+        select = Select(Navigate.driver.find_element_by_id('scourse'))
+        select.select_by_visible_text(class_name)
 
 
 def get_student_scores():
@@ -58,12 +66,6 @@ def update_webassign(worksheet, scores):
 
 
 if __name__ == "__main__":
-
-    import yaml
-    import gspread
-    import datetime
-    from selenium import webdriver
-    from selenium.webdriver.support.ui import Select
 
     WA_email = 'stevenwilsonnunez@ufm.edu'
     WA_password = 'Kelpforest13?'
