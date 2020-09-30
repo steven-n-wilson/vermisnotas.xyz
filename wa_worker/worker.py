@@ -41,26 +41,24 @@ class WebAssign():
         return scores
 
 
-def load_gspread(creds_file_path, spread_name):
-    gc = gspread.service_account(filename=creds_file_path)
-    sh = gc.open(spread_name)
-    return sh
+class Storage():
 
+    gc = gspread.service_account(filename='wa_worker/creds.json')
 
-def load_worksheet(sh, sheet_name):
-    worksheet = sh.worksheet(sheet_name)
-    return worksheet
+    def __init__(self, spreadsheet, worksheet):
+        self.spreadsheet = Storage.gc.open(spreadsheet)
+        self.worksheet = self.spreadsheet.worksheet(spreadsheet)
 
+    # def load_worksheet(sh, sheet_name):
+    #     worksheet = sh.worksheet(sheet_name)
+    #     return worksheet
 
-def update_webassign(worksheet, scores):
-    worksheet.update('J1', int(scores[0]))
-    scores.pop(0)
-    for i in range(len(scores)):
-        worksheet.update(f'J{3 + i}', int(scores[i]))
+    def update_spreadsheet_scores(self, scores):
+        self.worksheet.update('J1', int(scores[0]))
+        del scores[0]
 
-
-def parse(soup):
-    pass
+        for i in range(len(scores)):
+            self.worksheet.update(f'J{i+3}', int(scores[i]))
 
 
 if __name__ == "__main__":
