@@ -1,3 +1,3 @@
 # WebAssign username and password:
-email = 'stevenwilsonnunez@ufm.edu'
-cengagePassword = 'Kelpforest13?'
+username = 'stevenwilsonnunez@ufm.edu'
+password = 'Kelpforest13?'

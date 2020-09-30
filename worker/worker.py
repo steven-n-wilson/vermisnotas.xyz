@@ -1,9 +1,10 @@
-import gspread
 import time
+import gspread
+
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 
-from loginDetails import email, cengagePassword
+from loginDetails import username, password
 
 
 class WebAssign():
@@ -51,10 +52,6 @@ class Storage():
         self.spreadsheet = Storage.gc.open(spreadsheet)
         self.worksheet = self.spreadsheet.worksheet(worksheet)
 
-    # def load_worksheet(sh, sheet_name):
-    #     worksheet = sh.worksheet(sheet_name)
-    #     return worksheet
-
     def update_spreadsheet_scores(self, scores):
         self.worksheet.update('J1', int(scores[0]))
         del scores[0]
@@ -62,20 +59,24 @@ class Storage():
         for i in range(len(scores)):
             self.worksheet.update(f'J{i+3}', int(scores[i]))
 
+    def get_all_values(self):
+        return self.worksheet.get_all_values()
+
 
 if __name__ == "__main__":
-    calculo_integral = WebAssign(email, cengagePassword)
 
-    calculo_integral.login()
-    calculo_integral.go_to_class('MC 106, section A, Fall 2020')
-    scores = calculo_integral.get_student_scores()
+    user = WebAssign(username, password)
+
+    user.login()
+    user.go_to_class('MC 106, section A, Fall 2020')
+    scores = user.get_student_scores()
 
     print(scores)
 
     calculo_integral_storage = Storage('scrapetosheets', 'NotasFinales')
     calculo_integral_storage.update_spreadsheet_scores(scores)
+    list_of_lists = calculo_integral_storage.get_all_values()
 
-    # list_of_lists = worksheet.get_all_values()
     # print(list_of_lists[0])
     # print(list_of_lists[1])
     # print(list_of_lists[2])
