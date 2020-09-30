@@ -1,4 +1,5 @@
 import gspread
+import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 
@@ -7,7 +8,7 @@ from loginDetails import email, cengagePassword
 
 class WebAssign():
 
-    driver = webdriver.Chrome(executable_path='wa_worker/chromedriver.exe')
+    driver = webdriver.Chrome(executable_path='worker/chromedriver.exe')
 
     def __init__(self, username, password):
         self.username = username
@@ -19,6 +20,7 @@ class WebAssign():
         WebAssign.driver.find_element_by_id(
             'cengagePassword').send_keys(self.password)
         WebAssign.driver.find_element_by_name('Login').click()
+        time.sleep(10)
 
     def go_to_class(self, class_name):
         WebAssign.driver.find_element_by_xpath(
@@ -43,11 +45,11 @@ class WebAssign():
 
 class Storage():
 
-    gc = gspread.service_account(filename='wa_worker/creds.json')
+    gc = gspread.service_account(filename='worker/creds.json')
 
     def __init__(self, spreadsheet, worksheet):
         self.spreadsheet = Storage.gc.open(spreadsheet)
-        self.worksheet = self.spreadsheet.worksheet(spreadsheet)
+        self.worksheet = self.spreadsheet.worksheet(worksheet)
 
     # def load_worksheet(sh, sheet_name):
     #     worksheet = sh.worksheet(sheet_name)
@@ -62,21 +64,18 @@ class Storage():
 
 
 if __name__ == "__main__":
+    calculo_integral = WebAssign(email, cengagePassword)
 
-    WA_email = 'stevenwilsonnunez@ufm.edu'
-    WA_password = 'Kelpforest13?'
+    calculo_integral.login()
+    calculo_integral.go_to_class('MC 106, section A, Fall 2020')
+    scores = calculo_integral.get_student_scores()
 
-    login(WA_email, WA_password)
-    go_to_class("MC 106, section A, Fall 2020")
+    print(scores)
 
-    student_scores = get_student_scores()
-    print(student_scores)
+    calculo_integral_storage = Storage('scrapetosheets', 'NotasFinales')
+    calculo_integral_storage.update_spreadsheet_scores(scores)
 
-    sh = load_gspread('wa_worker/creds.json', 'scrapetosheets')
-    worksheet = load_worksheet(sh, 'NotasFinales')
-
-    update_webassign(worksheet, student_scores)
-    list_of_lists = worksheet.get_all_values()
-    print(list_of_lists[0])
-    print(list_of_lists[1])
-    print(list_of_lists[2])
+    # list_of_lists = worksheet.get_all_values()
+    # print(list_of_lists[0])
+    # print(list_of_lists[1])
+    # print(list_of_lists[2])

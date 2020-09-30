@@ -1,7 +1,7 @@
-
-from flask import Flask, render_template
-import os
 import optparse
+import os
+from flask import Flask, render_template
+# from worker.worker import scores
 
 app = Flask(__name__)
 
