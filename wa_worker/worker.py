@@ -1,10 +1,17 @@
+class Navigate():
 
-def login(username, password):
-    driver.get('https://www.webassign.net/wa-auth/login')
-    driver.find_element_by_id('email').send_keys(username)
-    driver.find_element_by_id('cengagePassword').send_keys(password)
-    driver.find_element_by_name('Login').click()
-    time.sleep(10)
+    driver = webdriver.Chrome(executable_path='wa_worker/chromedriver.exe')
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def login(self):
+        Navigate.driver.get('https://www.webassign.net/wa-auth/login')
+        Navigate.driver.find_element_by_id('email').send_keys(self.username)
+        Navigate.driver.find_element_by_id(
+            'cengagePassword').send_keys(self.password)
+        Navigate.driver.find_element_by_name('Login').click()
 
 
 def go_to_class(class_name):
@@ -53,13 +60,10 @@ def update_webassign(worksheet, scores):
 if __name__ == "__main__":
 
     import yaml
-    import time
     import gspread
     import datetime
     from selenium import webdriver
     from selenium.webdriver.support.ui import Select
-
-    driver = webdriver.Chrome(executable_path='wa_worker/chromedriver.exe')
 
     WA_email = 'stevenwilsonnunez@ufm.edu'
     WA_password = 'Kelpforest13?'
