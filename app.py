@@ -27,7 +27,7 @@ def buy_tickets():
 
 if __name__ == "__main__":
 
-    debug = True
+    debug = False
 
     if environment == "development" or environment == "local":
         debug = True
