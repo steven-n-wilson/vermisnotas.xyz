@@ -1,7 +1,7 @@
 import time
 import gspread
-import requests
 import pandas as pd
+import json
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -84,9 +84,4 @@ if __name__ == "__main__":
     headers = data.pop(0)
 
     df = pd.DataFrame(data, columns=headers)
-
-    API_ENDPOINT = 'http://www.vermisnotas.xyz/ver-notas'
-
-    # r = requests.post(url=API_ENDPOINT, data=data)
-
-    # print(r.text)
+    df.to_pickle('MC 106, section A, Fall 2020')
