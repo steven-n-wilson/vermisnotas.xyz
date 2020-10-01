@@ -1,5 +1,7 @@
 import time
 import gspread
+import requests
+import pandas as pd
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -39,9 +41,11 @@ class WebAssign():
         scores = []
         for row in table.find_elements_by_xpath(".//tr"):
             [scores.append(td.text) for td in row.find_elements_by_xpath(
-                '//*[@id="11588030"]/td[4]/font')]
+                './/td[4]/font')]
 
-        return scores
+        total = WebAssign.driver.find_element_by_xpath(
+            '//*[@id="table-wrapper"]/div[1]/div[1]/table/tbody/tr[2]/td[2]/font').text
+        return scores, total
 
 
 class Storage():
@@ -52,9 +56,8 @@ class Storage():
         self.spreadsheet = Storage.gc.open(spreadsheet)
         self.worksheet = self.spreadsheet.worksheet(worksheet)
 
-    def update_spreadsheet_scores(self, scores):
-        self.worksheet.update('J1', int(scores[0]))
-        del scores[0]
+    def update_spreadsheet_scores(self, scores, total):
+        self.worksheet.update('J1', int(total))
 
         for i in range(len(scores)):
             self.worksheet.update(f'J{i+3}', int(scores[i]))
@@ -69,14 +72,21 @@ if __name__ == "__main__":
 
     user.login()
     user.go_to_class('MC 106, section A, Fall 2020')
-    scores = user.get_student_scores()
+    scores, total = user.get_student_scores()
 
-    print(scores)
+    print(scores, total)
 
     calculo_integral_storage = Storage('scrapetosheets', 'NotasFinales')
-    calculo_integral_storage.update_spreadsheet_scores(scores)
-    list_of_lists = calculo_integral_storage.get_all_values()
+    calculo_integral_storage.update_spreadsheet_scores(scores, total)
 
-    # print(list_of_lists[0])
-    # print(list_of_lists[1])
-    # print(list_of_lists[2])
+    data = calculo_integral_storage.get_all_values()
+    data = [list[1:] for list in data]
+    headers = data.pop(0)
+
+    df = pd.DataFrame(data, columns=headers)
+
+    API_ENDPOINT = 'http://www.vermisnotas.xyz/ver-notas'
+
+    # r = requests.post(url=API_ENDPOINT, data=data)
+
+    # print(r.text)
