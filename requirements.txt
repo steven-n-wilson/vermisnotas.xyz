@@ -1,5 +1,7 @@
 Flask
 gunicorn
-pandas
-gspread
 time
+gspread
+pandas
+selenium
+selenium.webdriver.support.ui
