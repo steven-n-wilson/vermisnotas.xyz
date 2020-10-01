@@ -1,5 +1,6 @@
 import optparse
 import os
+import pandas as pd
 from flask import Flask, render_template
 # from worker.worker import scores
 
@@ -21,12 +22,13 @@ def about():
 
 @app.route("/ver-notas")
 def buy_tickets():
-    return render_template("ver-notas.html")
+    df = pd.read_pickle('MC 106, section A, Fall 2020')
+    return render_template("ver-notas.html", df=df.to_html(classes='table', header='true'))
 
 
 if __name__ == "__main__":
 
-    debug = False
+    debug = True
 
     if environment == "development" or environment == "local":
         debug = True
