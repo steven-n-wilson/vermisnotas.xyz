@@ -65,22 +65,40 @@ class Storage():
         return self.worksheet.get_all_values()
 
 
+def save(file_name, data):
+    data = [list[1:] for list in data]
+    headers = data.pop(0)
+    df = pd.DataFrame(data, columns=headers)
+    df.to_pickle(file_name)
+
+
+def run(user, class_name, spread_name, sheet_name):
+    user.login()
+    user.go_to_class(class_name)
+
+    scores, total = user.get_student_scores()
+
+    myClass = Storage(spread_name, sheet_name)
+    myClass.update_spreadsheet_scores(scores, total)
+    data = myClass.get_all_values()
+
+    save(class_name, data)
+
+
 if __name__ == "__main__":
 
     user = WebAssign(username, password)
 
-    user.login()
-    user.go_to_class('MC 106, section A, Fall 2020')
-    scores, total = user.get_student_scores()
+    run(user, 'MC 106, section A, Fall 2020', 'scrapetosheets', 'NotasFinales')
 
-    print(scores, total)
+    # user.login()
+    # user.go_to_class('MC 106, section A, Fall 2020')
+    # scores, total = user.get_student_scores()
 
-    calculo_integral_storage = Storage('scrapetosheets', 'NotasFinales')
-    calculo_integral_storage.update_spreadsheet_scores(scores, total)
+    # print(scores, total)
 
-    data = calculo_integral_storage.get_all_values()
-    data = [list[1:] for list in data]
-    headers = data.pop(0)
+    # calculo_integral_storage = Storage('scrapetosheets', 'NotasFinales')
+    # calculo_integral_storage.update_spreadsheet_scores(scores, total)
+    # data = calculo_integral_storage.get_all_values()
 
-    df = pd.DataFrame(data, columns=headers)
-    df.to_pickle('MC 106, section A, Fall 2020')
+    # save('MC 106, section A, Fall 2020', data)
