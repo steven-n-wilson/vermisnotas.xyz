@@ -100,15 +100,3 @@ if __name__ == "__main__":
     user = WebAssign(username, password)
 
     run(user, 'MC 106, section A, Fall 2020', 'scrapetosheets', 'NotasFinales')
-
-    # user.login()
-    # user.go_to_class_scores('MC 106, section A, Fall 2020')
-    # scores, total = user.get_student_scores()
-
-    # print(scores, total)
-
-    # calculo_integral_storage = Storage('scrapetosheets', 'NotasFinales')
-    # calculo_integral_storage.update_spreadsheet_scores(scores, total)
-    # data = calculo_integral_storage.get_all_values()
-
-    # save('MC 106, section A, Fall 2020', data)
