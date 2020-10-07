@@ -17,6 +17,8 @@ class WebAssign():
         self.password = password
 
     def login(self):
+        """Login into WebAssign website with your username and password"""
+
         WebAssign.driver.get('https://www.webassign.net/wa-auth/login')
         WebAssign.driver.find_element_by_id('email').send_keys(self.username)
         WebAssign.driver.find_element_by_id(
@@ -24,7 +26,9 @@ class WebAssign():
         WebAssign.driver.find_element_by_name('Login').click()
         time.sleep(10)
 
-    def go_to_class(self, class_name):
+    def go_to_class_scores(self, class_name):
+        """Navigates to the class scores"""
+
         WebAssign.driver.find_element_by_xpath(
             '//*[@id="list"]/li[5]/a').click()
         WebAssign.driver.find_element_by_xpath(
@@ -34,6 +38,8 @@ class WebAssign():
         select.select_by_visible_text(class_name)
 
     def get_student_scores(self):
+        """Retrieves and saves class scores and total points to list and int"""
+
         table = WebAssign.driver.find_element_by_xpath(
             '//*[@id="table-wrapper"]/div[1]/div[2]/table')
 
@@ -56,16 +62,19 @@ class Storage():
         self.worksheet = self.spreadsheet.worksheet(worksheet)
 
     def update_spreadsheet_scores(self, scores, total):
+        """Updates google sheet with scores and total from WebAssign"""
         self.worksheet.update('J1', int(total))
 
         for i in range(len(scores)):
             self.worksheet.update(f'J{i+3}', int(scores[i]))
 
     def get_all_values(self):
+        """Gets all values from google sheet and returns a list of lists"""
         return self.worksheet.get_all_values()
 
 
 def save(file_name, data):
+    """Saves a local copy of the data from the spreadsheet"""
     data = [list[1:] for list in data]
     headers = data.pop(0)
     df = pd.DataFrame(data, columns=headers)
@@ -73,8 +82,9 @@ def save(file_name, data):
 
 
 def run(user, class_name, spread_name, sheet_name):
+    """Navigates to WebAssign, retrieves and saves data"""
     user.login()
-    user.go_to_class(class_name)
+    user.go_to_class_scores(class_name)
 
     scores, total = user.get_student_scores()
 
@@ -92,7 +102,7 @@ if __name__ == "__main__":
     run(user, 'MC 106, section A, Fall 2020', 'scrapetosheets', 'NotasFinales')
 
     # user.login()
-    # user.go_to_class('MC 106, section A, Fall 2020')
+    # user.go_to_class_scores('MC 106, section A, Fall 2020')
     # scores, total = user.get_student_scores()
 
     # print(scores, total)
