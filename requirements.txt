@@ -2,5 +2,3 @@ Flask
 gunicorn
 gspread
 pandas
-selenium
-selenium.webdriver.support.ui
