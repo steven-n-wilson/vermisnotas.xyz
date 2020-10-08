@@ -1,3 +1,4 @@
+import os
 import time
 import gspread
 import pandas as pd
@@ -7,10 +8,22 @@ from selenium.webdriver.support.ui import Select
 
 from loginDetails import username, password
 
+environment = os.getenv("ENVIRONMENT", "development")
+
 
 class WebAssign():
 
-    driver = webdriver.Chrome(executable_path='worker/chromedriver.exe')
+    if environment == "development" or environment == "local":
+        driver = webdriver.Chrome(executable_path='worker/chromedriver.exe')
+
+    else:
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--no-sandbox")
+        driver = webdriver.Chrome(executable_path=os.environ.get(
+            "CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     def __init__(self, username, password):
         self.username = username
