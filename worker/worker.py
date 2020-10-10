@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import Select
 
 from loginDetails import username, password
 
-environment = os.getenv("ENVIRONMENT", "production")
+environment = os.getenv("ENVIRONMENT", "development")
 
 
 class WebAssign():

@@ -2,3 +2,4 @@ Flask
 gunicorn
 gspread
 pandas
+APScheduler==3.0.0
