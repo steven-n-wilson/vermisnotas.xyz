@@ -2,3 +2,4 @@ Flask
 gunicorn
 gspread
 pandas
+selenium
