@@ -53,6 +53,19 @@ class WebAssign():
         select = Select(WebAssign.driver.find_element_by_id('scourse'))
         select.select_by_visible_text(class_name)
 
+    def get_student_names(self):
+        """Retrieves and saves students names"""
+
+        table = WebAssign.driver.find_element_by_xpath(
+            '//*[@id="table-wrapper"]/div[1]/div[2]/table')
+
+        names = []
+        for row in table.find_elements_by_xpath(".//tr"):
+            [names.append(td.text) for td in row.find_elements_by_xpath(
+                './/td[1]/a/font')]
+
+        return names
+
     def get_student_scores(self):
         """Retrieves and saves class scores and total points to list and int"""
 
@@ -90,12 +103,15 @@ class Storage():
         self.spreadsheet = Storage.gc.open(spreadsheet)
         self.worksheet = self.spreadsheet.worksheet(worksheet)
 
-    def update_spreadsheet_scores(self, scores, total):
+    def update_spreadsheet(self, scores, total, names):
         """Updates google sheet with scores and total from WebAssign"""
-        self.worksheet.update('J1', int(total))
+        self.worksheet.update('I1', int(total))
 
         for i in range(len(scores)):
-            self.worksheet.update(f'J{i+3}', float(scores[i]))
+            self.worksheet.update(f'I{i+3}', float(scores[i]))
+
+        for i in range(len(names)):
+            self.worksheet.update(f'C{i+3}', names[i])
 
     def get_all_values(self):
         """Gets all values from google sheet and returns a list of lists"""
@@ -116,9 +132,10 @@ def run(user, class_name, spread_name, sheet_name):
     user.go_to_class_scores(class_name)
 
     scores, total = user.get_student_scores()
+    names = user.get_student_names()
 
     myClass = Storage(spread_name, sheet_name)
-    myClass.update_spreadsheet_scores(scores, total)
+    myClass.update_spreadsheet(scores, total, names)
     data = myClass.get_all_values()
 
     user.quit()
