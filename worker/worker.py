@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import Select
 
 from loginDetails import username, password
 
-environment = os.getenv("ENVIRONMENT", "production")
+environment = os.getenv("ENVIRONMENT", "development")
 
 
 class WebAssign():
@@ -37,7 +37,7 @@ class WebAssign():
         WebAssign.driver.find_element_by_id(
             'cengagePassword').send_keys(self.password)
         WebAssign.driver.find_element_by_name('Login').click()
-        time.sleep(10)
+        WebAssign.driver.implicitly_wait(10)  # seconds
 
     def go_to_class_scores(self, class_name):
         """Navigates to the class scores"""
@@ -47,11 +47,24 @@ class WebAssign():
         WebAssign.driver.find_element_by_xpath(
             '//*[@id="list"]/li[5]/ul/li[3]/a').click()
 
+        select = Select(WebAssign.driver.find_element_by_id('selectPeriod'))
+        select.select_by_value("all")
+
         select = Select(WebAssign.driver.find_element_by_id('scourse'))
         select.select_by_visible_text(class_name)
 
     def get_student_scores(self):
         """Retrieves and saves class scores and total points to list and int"""
+
+        select = Select(WebAssign.driver.find_element_by_id(
+            'assignmentDateSelector'))  # Selects all classes
+        select.select_by_value("all")
+
+        select = Select(WebAssign.driver.find_element_by_id(
+            'studentDateSelector'))
+        select.select_by_value("all")  # Selects all students
+
+        WebAssign.driver.implicitly_wait(10)  # seconds
 
         table = WebAssign.driver.find_element_by_xpath(
             '//*[@id="table-wrapper"]/div[1]/div[2]/table')
@@ -64,6 +77,9 @@ class WebAssign():
         total = WebAssign.driver.find_element_by_xpath(
             '//*[@id="table-wrapper"]/div[1]/div[1]/table/tbody/tr[2]/td[2]/font').text
         return scores, total
+
+    def quit(self):
+        WebAssign.driver.quit()
 
 
 class Storage():
@@ -79,7 +95,7 @@ class Storage():
         self.worksheet.update('J1', int(total))
 
         for i in range(len(scores)):
-            self.worksheet.update(f'J{i+3}', int(scores[i]))
+            self.worksheet.update(f'J{i+3}', float(scores[i]))
 
     def get_all_values(self):
         """Gets all values from google sheet and returns a list of lists"""
@@ -105,6 +121,7 @@ def run(user, class_name, spread_name, sheet_name):
     myClass.update_spreadsheet_scores(scores, total)
     data = myClass.get_all_values()
 
+    user.quit()
     save(class_name, data)
 
 
@@ -112,4 +129,8 @@ if __name__ == "__main__":
 
     user = WebAssign(username, password)
 
-    run(user, 'MC 106, section A, Fall 2020', 'scrapetosheets', 'NotasFinales')
+    run(user, "MC 006, section B, Fall 2019", 'scrapetosheets', 'NotasFinales')
+
+    # "MC 106, section A, Fall 2020" - Clase de Prueba
+    # "MC 006, section B, Fall 2019"
+    # "MC 006, section A, Fall 2019"
