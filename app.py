@@ -6,7 +6,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 developer = os.getenv("DEVELOPER", "Steven Wilson")
-environment = os.getenv("ENVIRONMENT", "production")
+environment = os.getenv("ENVIRONMENT", "development")
 
 
 @app.route("/")
