@@ -21,7 +21,7 @@ def about():
 
 @app.route("/ver-notas")
 def buy_tickets():
-    df = pd.read_pickle('MC 106, section A, Fall 2020')
+    df = pd.read_pickle('MC 006, section B, Fall 2019')
     return render_template("ver-notas.html", df=df.to_html(classes='table', header='true'))
 
 
