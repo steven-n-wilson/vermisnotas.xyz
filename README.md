@@ -9,6 +9,5 @@ Por medio de **Selenium** se automatizó el login y la extracción de notas. **G
 ## Descripción General de la Arquitectura
 ![Descripción General de la Arquitectura](https://github.com/steven-n-wilson/vermisnotas.xyz/blob/master/static/images/architectureOverview.png)
 
-## Setup Local
 
 
