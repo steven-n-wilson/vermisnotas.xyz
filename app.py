@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from flask import Flask, render_template
-# from worker.worker import scores
 
 app = Flask(__name__)
 
@@ -21,6 +20,7 @@ def about():
 
 @app.route("/ver-notas")
 def buy_tickets():
+    # Cambiar segun la clase que se quiere desplegar
     df = pd.read_pickle('MC 006, section B, Fall 2019')
     return render_template("ver-notas.html", df=df.to_html(classes='table', header='true'))
 
